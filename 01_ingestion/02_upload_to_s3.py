@@ -12,9 +12,9 @@ BUCKET = "weather-data"
 current_time_utc = datetime.datetime.now(datetime.UTC)
 # quando creo DAG lasciare solo ora (viene eseguita ogni ora alle :00)
 with open("raw_data/datetime.txt", "w") as f:
-    f.write(f"{current_time_utc.hour}_{current_time_utc.minute}")
+    f.write(f"{current_time_utc.hour}-{current_time_utc.minute}")
 
-OBJECT_NAME = f"raw/dt_{current_time_utc.date()}/city_milano_{current_time_utc.hour}_{current_time_utc.minute}.json"
+OBJECT_NAME = f"raw/dt_{current_time_utc.date()}/city_milano_{current_time_utc.hour}-{current_time_utc.minute}.json"
 
 # creiamo il client
 s3 = boto3.client(
