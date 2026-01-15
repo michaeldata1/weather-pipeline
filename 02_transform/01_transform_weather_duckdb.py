@@ -47,18 +47,18 @@ con.execute(
 # save in parquet format (on s3)
 # PARQUET FILE FORMAT
 query = """
-copy(
-    SELECT
-        name AS city, 
-        to_timestamp(dt) as timestamp,      
-        DATE(to_timestamp(dt)) AS date,
+COPY 
+    ( SELECT 
+        name AS city,
         main.temp - 273.15 AS temp_c,
         main.humidity AS humidity,
         main.pressure AS pressure,
-        wind.speed as wind_speed
+        wind.speed AS wind_speed,
+        to_timestamp(dt) AT TIME ZONE 'UTC' AS timestamp,
+        DATE(to_timestamp(dt) AT TIME ZONE 'UTC') AS date,
     FROM read_json($input)
     )
-TO $output(FORMAT PARQUET);
+TO $output (FORMAT PARQUET);
 """
 con.execute(query, {"input": RAW_FILE_PATH, "output": OUTPUT_FILE_PATH})
 
